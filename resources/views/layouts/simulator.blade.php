@@ -41,14 +41,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Stock Simulator</a>
+          <a class="navbar-brand" href="{{ route('profile') }}">Stock Simulator</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">            
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -68,6 +64,9 @@
                     </li>
                 </ul>
             </li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Help</a></li>
+            
           </ul>
         </div>
       </div>
@@ -85,8 +84,8 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <ul class="nav nav-tabs">
-            @yield('nav-tabs');
+          <ul class="nav nav-pills">
+            @yield('nav-pills');
           </ul>
           @yield('page-header');
         </div>

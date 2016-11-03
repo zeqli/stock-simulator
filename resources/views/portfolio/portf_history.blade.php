@@ -1,11 +1,10 @@
 @extends('layouts.simulator')
 
-@section('nav-bar')
-    @parent
-    @include('portfolio.portf-nav')
-@endsection
+@section('nav-pills')
+    <li role="presentation" ><a href="{{ route('portfolio') }}">Portfolio</a></li>
+    <li role="presentation" class="active"><a href="{{ route('tradehistory') }}">Trade History</a></li>
+@stop
 
-@section('content')
-
-    <h1>Trade History</h1>
+@section('page-header')
+    <h1 class="page-header">Trade History</h1>
 @stop

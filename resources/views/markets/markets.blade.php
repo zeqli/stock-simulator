@@ -1,7 +1,7 @@
 @extends('layouts.simulator')
 
 
-@section('nav-tabs')
+@section('nav-pills')
     <li role="presentation" class="active"><a href="{{ route('markets') }}">markets</a></li>
     <li role="presentation"><a href="{{ route('watchlist') }}">watchlist</a></li>
 @stop
