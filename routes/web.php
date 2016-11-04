@@ -50,5 +50,3 @@ Route::group(['prefix' => 'simulator'], function(){
 //     return $user;
 // }
 Auth::routes();
-
-Route::get('/home', 'HomeController@index');
