@@ -85,9 +85,9 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <ul class="nav nav-pills">
-            @yield('nav-pills');
+            @yield('nav-pills')
           </ul>
-          @yield('page-header');
+          @yield('page-header')
         </div>
       </div>
     </div>
