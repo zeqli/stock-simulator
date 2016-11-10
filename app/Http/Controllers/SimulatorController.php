@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class SimulatorController extends Controller{
     public function __construct(){
@@ -11,7 +13,10 @@ class SimulatorController extends Controller{
 
     // Profile Section
     public function profile_index(){
-        return view('profile.profile');
+        $user = Auth::user();       
+
+        return view('profile.profile', ['user' => $user]);
+        
     }
 
     // Portfolio Section
