@@ -23,6 +23,10 @@
     <!-- Custom styles for this template -->
     <link href="{{ URL::asset('css/dashboard.css') }}" rel="stylesheet">
 
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -74,6 +78,8 @@
 
     <div class="container-fluid">
       <div class="row">
+
+        <!-- Sidebar Section -->
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             {{-- <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li> --}}
@@ -83,11 +89,18 @@
             <li><a href="{{ route('markets')}} "/>Markets</a></li>
           </ul>
         </div>
+
+        <!-- Content Section -->
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <ul class="nav nav-pills">
             @yield('nav-pills')
           </ul>
-          @yield('page-header')
+          <div>
+            @yield('page-header')
+          </div>
+          <div>
+            @yield('content')
+          </div>
         </div>
       </div>
     </div>
@@ -95,8 +108,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/app.js"></script>
+    
+
   </body>
 </html>

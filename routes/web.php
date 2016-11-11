@@ -6,6 +6,7 @@ Route::get('/', function(){
 
 
 // Simulator
+// localhost/simulator/
 Route::group(['prefix' => 'simulator'], function(){
     
     // Profile
@@ -33,7 +34,10 @@ Route::group(['prefix' => 'simulator'], function(){
     // Market
     Route::group(['prefix' => 'markets'], function(){
         Route::get('/', 'SimulatorController@markets_index')->name('markets');
-        Route::get('watchlist', 'SimulatorController@markets_watchlist')->name('watchlist');    
+        Route::get('watchlist', 'SimulatorController@markets_watchlist')->name('watchlist');
+        Route::match(['POST', 'GET'], 'search', 'SimulatorController@markets_search')->name('search'); 
+        Route::get('stocks/{symbol}', 'SimulatorController@markets_stocks_symbol')->name('stocks');
+        Route::get('symbolnotfound/', 'SimulatorController@markets_symbol_not_found')->name('notfound');   
     });
 });
 

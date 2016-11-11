@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\StockSymbol;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-
 
 class SimulatorController extends Controller{
     public function __construct(){
@@ -49,5 +50,32 @@ class SimulatorController extends Controller{
 
     public function markets_watchlist(){
         return view('markets.watchlist');
+    }
+
+    public function markets_search(Request $request){
+        $symbol = strtolower($request->input('symbol'));
+
+
+        // If symbol field is empty, or the symbol is present in our database 
+        // then redirect the user to symbol no found page
+        
+        
+        // If symbol field is not empty and the symbol is found on database, then redirect the user to quote page
+        try{
+            $result = StockSymbol::where('symbol', $symbol)->firstOrFail();
+        } catch(ModelNotFoundException $e){
+            $url = route('notfound').'?symbol='.$symbol;
+            return redirect($url);
+        }
+
+        return redirect()->route('stocks', ['symbol' => $symbol]);
+    }
+
+    public function markets_stocks_symbol(StockSymbol $symbol){
+        return view('markets.stocks', ['symbol' => $symbol]);
+    }
+
+    public function markets_symbol_not_found(){
+        return view('markets.symbolnotfound');
     }
 }
