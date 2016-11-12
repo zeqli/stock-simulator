@@ -21,6 +21,7 @@ class CreateAccountsTable extends Migration
             $table->rememberToken();
             $table->timestamps(); 
         });
+        
     }
 
     /**
