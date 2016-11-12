@@ -19,8 +19,39 @@
 
 <div class="container-fluid">
     <h3>{{ $symbol_e_obj->symbol }} STOCK CHART</h3>
+		    
+		    <p>Summary: </p>
+		    <p>Code: {{ $stock[0] }}</p>
+		    <p>Name: {{ $stock[1] }}</p>
+		    <p>Last Trade Price: {{ $stock[2] }}</p>
+		    <p>Last Trade Time: {{ $stock[3] }}Eastern Time</p>
+		    <p>Last Trade Date: {{ $stock[4] }}</p>
+		    <p>Change and Percent Change: {{ $stock[5]}} </p>
+		    <p>Volume: {{ $stock[6] }}</p>
+		    <p>Previous Close: {{ $stock[7]}} </p>
 </div>
 
+<div class="container-fluid">
+		<!-- TradingView Widget BEGIN -->
+	<script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
+	<script type="text/javascript">
+	new TradingView.widget({
+	  "width": 680,
+	  "height": 410,
+	  "symbol": "{{ $symbol_e_obj->symbol }}",
+	  "interval": "D",
+	  "timezone": "Etc/UTC",
+	  "theme": "White",
+	  "style": "1",
+	  "locale": "en",
+	  "toolbar_bg": "#f1f3f6",
+	  "enable_publishing": false,
+	  "allow_symbol_change": true,
+	  "hideideas": true
+	});
+	</script>
+	<!-- TradingView Widget END -->
+</div>
 @stop
 
 

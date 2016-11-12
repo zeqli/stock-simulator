@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\StockSymbol;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use App\Mylibrary\YahooStock;
 
 class SimulatorController extends Controller{
     public function __construct(){
@@ -72,7 +73,14 @@ class SimulatorController extends Controller{
     }
 
     public function markets_stocks_symbol(StockSymbol $symbol){
-        return view('markets.stocks', ['symbol_e_obj' => $symbol]);
+        $objYahooStock = new YahooStock;    
+
+        $objYahooStock->addFormat("snl1t1d1cvp"); 
+        $objYahooStock->addStock($symbol->symbol);
+        $result = $objYahooStock->getQuotes();
+
+        return view('markets.stocks', ['symbol_e_obj' => $symbol, 
+            'stock' => $result[$symbol->symbol]]);
     }
 
     public function markets_symbol_not_found(){
