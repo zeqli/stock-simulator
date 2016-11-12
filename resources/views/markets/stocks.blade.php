@@ -18,6 +18,30 @@
 </form>
 
 <div class="container-fluid">
+	<!-- TradingView Widget BEGIN -->
+	<div id="tv-medium-widget-1f5b7"></div>
+	<script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
+	<script type="text/javascript">
+	new TradingView.MediumWidget({
+	  "container_id": "tv-medium-widget-1f5b7",
+	  "symbols": [
+	    
+	      "{{ $symbol_e_obj->symbol }}"
+	    
+	  ],
+	  "gridLineColor": "#e9e9ea",
+	  "fontColor": "#83888D",
+	  "underLineColor": "#dbeffb",
+	  "trendLineColor": "#4bafe9",
+	  "width": "700px",
+	  "height": "500px",
+	  "locale": "en"
+	});
+	</script>
+	<!-- TradingView Widget END -->
+</div>
+
+<div class="container-fluid">
     <h3>{{ $symbol_e_obj->symbol }} STOCK CHART</h3>
 		    
 		    <p>Summary: </p>
