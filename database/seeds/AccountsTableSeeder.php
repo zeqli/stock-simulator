@@ -12,7 +12,7 @@ class AccountsTableSeeder extends Seeder
      */
     public function run(){
         // truncate the entire table and reset the auto-incrementing ID to zero.
-        DB::table('accounts')->truncate();
+        #DB::table('accounts')->truncate();
         DB::table('accounts')->insert([
             'name' => 'admin',
             'email' => 'support@admin.com',
