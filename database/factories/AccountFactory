@@ -23,7 +23,8 @@ $factory->define(App\Account::class, function (Faker\Generator $faker) {
         // 'remember_token' => str_random(10),
         'created_at' => Carbon::createFromTimeStamp(
             $faker->dateTimeThisMonth()->getTimestamp()),
-        'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        'amount' => '1000000'
     ];
 });
 

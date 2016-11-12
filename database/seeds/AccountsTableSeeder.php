@@ -19,7 +19,8 @@ class AccountsTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             // 'remember_token' => str_random(10),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'amount' => '100000000'
         ]);
         factory(App\Account::class, 50)->create();
     }

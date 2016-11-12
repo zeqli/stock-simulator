@@ -18,7 +18,7 @@ class Account extends Authenticatable
     protected $table = 'accounts';
 
 
-    protected $fillable = ['name', 'email', 'password', 'username', 'remember_token', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'email', 'password', 'username', 'remember_token', 'created_at', 'updated_at','amount'];
 
     /**
      * The attributes that should be hidden for arrays.
