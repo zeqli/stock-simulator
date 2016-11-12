@@ -18,7 +18,7 @@
 </form>
 
 <div class="container-fluid">
-    <h3>{{ $symbol->symbol }} STOCK CHART</h3>
+    <h3>{{ $symbol_e_obj->symbol }} STOCK CHART</h3>
 </div>
 
 @stop

@@ -8,12 +8,15 @@
 
 @section('page-header')
     <h1 class="page-header">Markets</h1>
+<<<<<<< f19ba091403e66dd50aec9b1aba0af5a133361e7
     <div>
     	<form>
     		<input type="text" name="symbol" placeholder="enter symbol you want to Lookup" size="35">
     		<input type="submit" name="submit" value="Lookup symbol">
     	</form>
     </div>
+=======
+>>>>>>> Rename symbol variable in markets, stocks, and SimulatorController
 @stop
 
 @section('content')

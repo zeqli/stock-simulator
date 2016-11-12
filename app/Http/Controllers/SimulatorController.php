@@ -72,7 +72,7 @@ class SimulatorController extends Controller{
     }
 
     public function markets_stocks_symbol(StockSymbol $symbol){
-        return view('markets.stocks', ['symbol' => $symbol]);
+        return view('markets.stocks', ['symbol_e_obj' => $symbol]);
     }
 
     public function markets_symbol_not_found(){
