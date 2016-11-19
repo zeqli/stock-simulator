@@ -21,7 +21,10 @@ td, th {
     <h1 class="page-header">Trade History</h1>
     <div>
     	<table>
-    		<th><td>Date</td><td>Trade Type</td><td>Stock Symbol</td><td>Quantity</td><td>Price</td><td>Total Cash Value</td><td>Account Value</td></th>
+    		<tr><th><td>Date</td><td>Trade Type</td><td>Stock Symbol</td><td>Quantity</td><td>Price</td><td>Account Value</td></th></tr>
+            @for($i=0;$i<count($query);$i++)
+                <tr><th><td>{{$query[$i]->time}}</td><td>{{$query[$i]->buy_sell}}</td><td>{{$query[$i]->symbol}}</td><td>{{$query[$i]->quantity}}</td><td>{{$query[$i]->price}}</td><td>{{$query[$i]->amount}}</td></th></tr>
+            @endfor
     	</table>
     </div>
 @stop

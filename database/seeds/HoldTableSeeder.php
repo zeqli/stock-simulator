@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
 
-class WatchlistTableSeeder extends Seeder
+class HoldTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,12 +12,16 @@ class WatchlistTableSeeder extends Seeder
     public function run()
     {
         //
+
+        //
         #DB::table('trade')->truncate();
-        DB::table('watchlist')->insert([
+        DB::table('hold')->insert([
             'U_id' => '1',
-            'symbol' => 'aa'
+            'symbol' => 'NASDAQ',
+            'quantity' => '5'
             
         ]);
-        factory(App\watchlist::class, 50)->create();
+        factory(App\hold::class, 50)->create();
+    
     }
 }

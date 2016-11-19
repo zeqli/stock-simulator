@@ -37,6 +37,7 @@ Route::group(['prefix' => 'simulator'], function(){
         Route::get('/', 'SimulatorController@markets_index')->name('markets');
         Route::get('watchlist', 'SimulatorController@markets_watchlist')->name('watchlist');
         Route::match(['POST', 'GET'], 'search', 'SimulatorController@markets_search')->name('search'); 
+        Route::match(['POST','GET'],'add','SimulatorController@markets_add')->name('add');
         Route::get('stocks/{symbol}', 'SimulatorController@markets_stocks_symbol')->name('stocks');
         Route::get('symbolnotfound/', 'SimulatorController@markets_symbol_not_found')->name('notfound');   
     });

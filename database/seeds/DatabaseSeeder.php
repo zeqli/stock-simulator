@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StockSymbolTableSeeder::class);
         $this->call(TradeTableSeeder::class);
         $this->call(WatchlistTableSeeder::class);
+        $this->call(HoldTableSeeder::class);
     }
 }

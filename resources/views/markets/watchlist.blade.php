@@ -24,11 +24,35 @@ td, th {
     	<div>
     		<h3>Stock Portfolio</h3>
             <br>
-            <input type="text" name="symbol" placeholder="enter symbol you want to add into watchlist" size="50">
-            <input type="submit" name="submit" value="Add symbol">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/simulator/markets/add/') }}">
+                {{ csrf_field() }}
+  
+
+                <input type="text" name="symbol" placeholder="enter symbol you want to add into watchlist" size="50">
+                <input type="submit" name="submit" value="Add symbol">
+            </form>
             <div id="watchlist">
     		<table>       
-    			<th><td>Symbol</td><td>Company</td><td>Last Trade</td><td>Today's Change</td></th>
+    			<tr>
+                    <th>
+                        <td>Symbol</td>
+                        <td>Company</td>
+                        <td>Last Trade</td>
+                        <td>Today's Change</td>
+                    </th>
+                </tr>
+                
+                @foreach($query as $entry)
+                    <tr>
+                        <th>
+                            <td>{{ $entry['symbol'] }}</td>
+                            <td>{{ $entry['name'] }}</td>
+                            <td>{{ $entry['lasttrade'] }}</td>
+                            <td>{{ $entry['change'] }}</td>
+                        </th>
+                    </tr>
+                @endforeach
+
     		</table>
             </div>
             

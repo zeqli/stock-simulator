@@ -14,6 +14,7 @@
     		<label>Member since : </label>
     		<p>{{$user->created_at}}</p>
     		<label>Account Value : </label>
+            <p>{{$user->amount}}</p>
     	</div>
     	
    
