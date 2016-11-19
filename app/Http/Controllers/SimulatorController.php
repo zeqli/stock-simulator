@@ -29,10 +29,14 @@ class SimulatorController extends Controller{
         $query = DB::table('accounts')->where('accounts.id','=',$user->id)
                                       ->join('trade','accounts.id','=','trade.U_id')
                                       ->join('hold','accounts.id','=','hold.U_id')
-                                      ->select('buy_sell','hold.symbol as symbol','hold.quantity as quantity','trade.price as price')
+                                      ->select('hold.symbol as symbol','hold.quantity as quantity','trade.price as price')
+                                      ->where('trade.buy_sell','=','buy')
+                                      ->distinct()
                                       ->get();
 
         $hold_arr = $query->toArray();
+
+        
 
         $objYahooStock->addFormat("snl1t1d1cvp");
         foreach ($hold_arr as $hold) {
@@ -44,12 +48,14 @@ class SimulatorController extends Controller{
         $hold_entries = array();
         foreach ($hold_arr as $hold) {
             $symbol = $hold->symbol;
-            
-            $hold_entries[] = ['buy_sell' =>$hold->buy_sell,
+            $total = $hold->quantity * $result[$symbol][2];
+            $hold_entries[] = [
                             'symbol' => $symbol, 
                             'quantity' => $hold->quantity, 
                             'price' => $hold->price,
                             'lasttrade' => $result[$symbol][2], 
+                            'total' => $total,
+
                             ];
         }
 

@@ -22,20 +22,21 @@ td, th {
     <div>
     	<h3>Stock Portfolio</h3>
     	<table>
-    		<tr><th><td>Type</td><td>Symbol</td><td>Quantity</td><td>Purchase Price</td><td>Current Price</td></th></tr>
+    		<tr><th><td>Symbol</td><td>Quantity</td><td>Purchase Price</td><td>Current Price</td><td>Total price</td></th></tr>
             
             @foreach($query as $entry)
                     <tr>
                         <th>
-                            <td>{{ $entry['buy_sell'] }}</td>
+                            
                             <td>{{ $entry['symbol'] }}</td>
                             <td>{{ $entry['quantity'] }}</td>
                             <td>{{ $entry['price'] }}</td>
                             <td>{{ $entry['lasttrade'] }}</td>
-                           
+                           <td>{{ $entry['total'] }}</td>
                         </th>
                     </tr>
-                @endforeach
+            @endforeach
+
     	</table>
     
     </div>
