@@ -32,7 +32,7 @@ $factory->define(App\trade::class, function(Faker\Generator $faker) use($factory
     return[
         'U_id' => $factory->create(App\Account::class)->id,
         'symbol' => DB::table('stock_symbols')->inRandomOrder()->first()->symbol,
-        'buy/sell' => rand(0,1) ==0 ?'buy' :'sell',
+        'buy_sell' => rand(0,1) ==0 ?'buy' :'sell',
         'price' => $faker->numberBetween(1,1000),
         'time' => Carbon::createFromTimeStamp(
             $faker->dateTimeThisMonth()->getTimestamp()),
@@ -47,6 +47,16 @@ $factory->define(App\watchlist::class, function(Faker\Generator $faker) use($fac
         'symbol' => DB::table('stock_symbols')->inRandomOrder()->first()->symbol
         
     ];
+});
+
+$factory->define(App\hold::class, function(Faker\Generator $faker) use($factory){
+    return[
+        'U_id' => $factory->create(App\Account::class)->id,
+        'symbol' => DB::table('stock_symbols')->inRandomOrder()->first()->symbol,
+        'quantity' => $faker->numberBetween(0,50)
+        
+    ];
+
 });
 
 

@@ -17,7 +17,7 @@ class CreateTradesTable extends Migration
             $table->increments('t_id');
             $table->integer('U_id')->unsigned();
             $table->string('symbol');
-            $table->string('buy/sell');
+            $table->string('buy_sell');
             $table->string('price');
             $table->dateTime('time');
             $table->string('quantity');

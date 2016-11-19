@@ -15,7 +15,7 @@ class trade extends Model
     protected $table = 'trade';
 
 
-    protected $fillable = ['U_id', 'symbol', 'buy/sell', 'price', 'time', 'quantity', 'status'];
+    protected $fillable = ['U_id', 'symbol', 'buy_sell', 'price', 'time', 'quantity', 'status'];
 
     /**
      * The attributes that should be hidden for arrays.
