@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\StockSymbol;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Mylibrary\YahooStock;
 
 class SimulatorController extends Controller{
@@ -36,13 +37,25 @@ class SimulatorController extends Controller{
     }
 
     public function trade_open(){
-        return view('trade.showopentrade');
+        $user = Auth::user();
+        $trades = DB::table('trade')->where('U_id', $user->id)->where('status', 'pending')->get();
+
+//        $message = "";
+//        return view('trade.showopentrade', compact('trades','message'));
+        return view('trade.showopentrade', compact('trades'));
     }
 
     public function trade_fail(){
-        return view('trade.showfailtrade');
+        $user = Auth::user();
+        $failtrades = DB::table('trade')->where('U_id', $user->id)->where('status', 'fail')->get();
+        return view('trade.showfailtrade',  compact('failtrades'));
     }
 
+    public function trade_cancel($tid){
+        $user = Auth::user();
+        $trades = DB::table('trade')->where('U_id', $user->id)->where('t_id', $tid)->update(['status' => 'fail']);
+        return redirect('simulator/trade/showopentrades')->with('message', $tid);
+    }
 
     // Market Section
     public function markets_index(){

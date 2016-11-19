@@ -29,6 +29,7 @@ Route::group(['prefix' => 'simulator'], function(){
         });
         Route::get('showopentrades', 'SimulatorController@trade_open')->name('opentrades');
         Route::get('showfailtrades', 'SimulatorController@trade_fail')->name('failtrades');
+        Route::get('canceltrade/{tid}', 'SimulatorController@trade_cancel')->name('canceltrade');;
     });
 
     // Market

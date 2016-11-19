@@ -23,10 +23,31 @@ td, th {
 @section('page-header')
     <h1 class="page-header">Fail Trade</h1>
     <div>
+        @if (count($failtrades) == 0)
     	<p id="failTrades"> You currently have no failed trades</p>
+        @endif
     	<div>
     		<table>
-    			<th><td>Date</td><td>Trade Type</td><td>Stock Symbol</td><td>Quantity</td><td>Price</td><td>Total Value</td></th>
+                <tr>
+                  <th>Id</th>
+                  <th>Date</th>
+                  <th>Trade Type</th>
+                  <th>Stock Symbol</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total Value</th>
+                </tr>
+                @foreach ($failtrades as $trade)
+                  <tr>
+                    <td>{{ $trade->t_id}}</td>
+                    <td>{{ $trade->time}}</td>
+                    <td>{{ $trade->{'buy/sell'} }}</td> 
+                    <td>{{ $trade->symbol}}</td>
+                    <td>{{ $trade->quantity}}</td>
+                    <td>{{ $trade->price}}</td>
+                    <td>{{ $trade->price * $trade->quantity}}</td>
+                  </tr>
+                @endforeach
     		</table>
     	</div>
     </div>
