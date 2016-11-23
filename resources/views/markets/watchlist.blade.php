@@ -21,6 +21,9 @@ td, th {
 @section('page-header')
     <h1 class="page-header">Watchlist</h1>
     <div>
+        <p>Track stocks without adding it to your portfolio.</p>
+    </div>
+    <div>
     	<div>
     		<h3>Stock Portfolio</h3>
             <br>

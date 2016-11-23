@@ -14,6 +14,15 @@ class SimulatorController extends Controller{
         $this->middleware('auth');
     }
 
+    // Helper function
+    public function get_market_price($symbol){
+        $objYahooStock = new YahooStock;    
+        $objYahooStock->addFormat("l1");    // l1 - last trade price 
+        $objYahooStock->addStock($symbol);
+        $result = $objYahooStock->getQuotes();
+        return $result[$symbol][0];
+    }
+
     // Profile Section
     public function profile_index(){
         $user = Auth::user();       
@@ -77,7 +86,8 @@ class SimulatorController extends Controller{
     }
 
     // Trade Section
-    public function trade_index(){
+    public function trade_index(Request $require){
+
         $user = Auth::user();  
         return view('trade.tradestock',['user' => $user]);
     }
@@ -97,11 +107,65 @@ class SimulatorController extends Controller{
         return view('trade.showfailtrade',  compact('failtrades'));
     }
 
-    public function trade_cancel($tid){
+
+	public function trade_cancel($tid){
         $user = Auth::user();
         $trades = DB::table('trade')->where('U_id', $user->id)->where('t_id', $tid)->update(['status' => 'fail']);
         return redirect('simulator/trade/showopentrades')->with('message', $tid);
     }
+
+    public function trade_preview(Request $request){
+        define('COMMISSION', 4.99);
+        $duration = ['gtc' => 'Good Till Cancelled', 'dor' => 'Day Order'];
+
+
+        $symbol = strtolower($request->input('sym'));
+        $qty = $request->input('qty');
+        $result = StockSymbol::where('symbol', $symbol)->first();
+    
+
+        // If symbol field is empty, or the symbol is present in our database
+        // then redirect the user to symbol no found page
+        if($result === null){
+            return back()->withInput()->with('symbol', $symbol);
+        }
+
+        // Check if the quantity is valid
+        if(!ctype_digit($qty) || intval($qty) > 999999){
+            return back()->withInput()->with('quantity', $qty);
+        }
+
+
+        // Get market price
+        $market_price = $this->get_market_price($symbol);
+
+        // Get total price
+        $total = $market_price + COMMISSION;
+
+        // If symbol field is not empty and the symbol is found on database, then redirect the user to quote page
+         return view('trade.tradepreview',
+            ['symbol' => $symbol,
+            'trans' => $request->input('trans'),
+            'stlmt' => 'n/a',
+            'duration' => $duration[$request->input('do')],
+            'price' => $market_price,
+            'quantity' => $qty,
+            'commission' => COMMISSION,
+            'total' => $total,
+            'value' => '50,000.00',
+            'bpwr' => '50,000.00',
+            'cash' => '50,000.00']);
+    }
+
+    
+
+    public function trade_confirm(Request $request){
+        // Make change of database table
+
+        // Get result
+        return view('trade.tradeconfirm', ['buy_sell' => $buy_sell, 'symbol' => $symbol]);
+    }
+
 
     // Market Section
     public function markets_index(){
@@ -149,21 +213,17 @@ class SimulatorController extends Controller{
 
     public function markets_search(Request $request){
         $symbol = strtolower($request->input('symbol'));
-
+        $result = StockSymbol::where('symbol', $symbol)->first();
 
         // If symbol field is empty, or the symbol is present in our database 
         // then redirect the user to symbol no found page
-        
-        
-        // If symbol field is not empty and the symbol is found on database, then redirect the user to quote page
-        try{
-            $result = StockSymbol::where('symbol', $symbol)->firstOrFail();
-        } catch(ModelNotFoundException $e){
+        if($result === null){
             $url = route('notfound').'?symbol='.$symbol;
             return redirect($url);
         }
-
-        return redirect()->route('stocks', ['symbol' => $symbol]);
+        
+        // If symbol field is not empty and the symbol is found on database, then redirect the user to quote page
+         return redirect()->route('stocks', ['symbol' => $symbol]);
     }
 
     public function markets_stocks_symbol(StockSymbol $symbol){

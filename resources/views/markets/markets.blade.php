@@ -12,13 +12,11 @@
 @stop
 
 @section('content')
-                       
-
-<form class="form-horizontal" role="form" method="POST" action="{{ url('/simulator/markets/search/') }}">
-    {{ csrf_field() }}
-    <input type="text" name="symbol" placeholder="Search a symbol"/>
-    <input type="submit" value="Search"/>
-</form>
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/simulator/markets/search/') }}">
+        {{ csrf_field() }}
+        <input type="text" name="symbol" placeholder="Search a symbol"/>
+        <input type="submit" value="Search"/>
+    </form>
 @stop
 
 

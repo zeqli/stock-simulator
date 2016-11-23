@@ -29,6 +29,9 @@ Route::group(['prefix' => 'simulator'], function(){
         });
         Route::get('showopentrades', 'SimulatorController@trade_open')->name('opentrades');
         Route::get('showfailtrades', 'SimulatorController@trade_fail')->name('failtrades');
+        Route::match(['POST', 'GET'],'tradepreview', 'SimulatorController@trade_preview')->name('tradepreview');
+        Route::get('tradeconfirmation', 'SimulatorController@trade_confirm')->name('tradeconfirm');
+        
         Route::get('canceltrade/{tid}', 'SimulatorController@trade_cancel')->name('canceltrade');;
     });
 
