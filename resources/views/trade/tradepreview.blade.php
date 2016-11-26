@@ -25,9 +25,9 @@
     margin: 0 0 12px 0;
     font-size: 22px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: grey;
+    color: gray;
     text-transform: uppercase;
-    border-bottom: 1px solid #e4e5e6;
+    border-bottom: 1px solid #ccc;
     
 }
 
@@ -41,7 +41,7 @@
 .table1 th {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
-    color: grey;
+    color: gray;
     font-weight: normal;
     border-bottom: solid 1px #ddd;
 }
@@ -49,7 +49,7 @@
 .table2 th {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
-    color: grey;
+    color: gray;
     font-weight: normal;
 }
 
@@ -79,6 +79,17 @@ td.num {
     width: 50%;
 }
 
+.summry{
+  width:60%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px; 
+}
+
+.info{
+  font-size: 13px;
+  text-align: left;
+  color: #900;
+}
 
 </style>
 
@@ -90,6 +101,13 @@ td.num {
 
 @section('page-header')
     <h1 class="page-header">Trade Stock</h1>
+
+    @if( session('close'))
+        <div class="summry">
+            <p class="info"><strong>Market is Currently Closed</strong></p>
+        </div>
+    @endif
+
     <!-- group box -->
     <div>
         <!-- box table left-->
@@ -108,18 +126,18 @@ td.num {
                         <th class="w4" >DURATION(TERM)</th>
                     </tr>
                     <tr>
-                        <td>{{ $symbol }}</td>
-                        <td>{{ $trans }}</td>
+                        <td>{{ strtoupper($symbol) }}</td>
+                        <td>{{ ucfirst($trans) }}</td>
                         <td>{{ $stlmt }}</td>
-                        <td>{{ $duration }}</td>
+                        <td>{{ $duration === 'gtc' ? 'Good Till Cancel' : 'Day Order' }}</td>
                     </tr>
                 </table>
 
                 <table class="table1">
                     <tr>
-                        <td rowspan="4" class="w5">At a price of ${{ $price }} per share, the value of this transaction is estimated at ${{$total}}, plus commission of ${{$commission}} for a total of ${{$total}}.</td>
+                        <td rowspan="4" class="w5">At a price of {{ '$'.number_format($price, 2) }} per share, the value of this transaction is estimated at {{'$'.number_format($price * $quantity, 2)}}, plus commission of {{'$'.number_format($commission, 2)}} for a total of {{'$'.number_format($total, 2)}}.</td>
                         <td class="w3">Price</td>
-                        <td class="w4">${{ $price }}</td>
+                        <td class="w4">{{ '$'.number_format($price, 2) }}</td>
                     </tr>
                     <tr>
                         <td class="w3">Quantity</td>
@@ -127,11 +145,11 @@ td.num {
                     </tr>
                     <tr>
                         <td class="w3">Commission</td>
-                        <td class="w4">${{ $commission }}</td>
+                        <td class="w4">{{ '$'.number_format($commission, 2) }}</td>
                     </tr>
                     <tr>
                         <td class="w3">Est. Total</td>
-                        <td class="w4">${{ $total }}</td>
+                        <td class="w4">{{ '$'.number_format($total, 2) }}</td>
                     </tr>
                 </table>
             </div>
@@ -139,8 +157,8 @@ td.num {
 
             <!-- Cancel, Submit, Change Order -->
             <div>
-                <input type="button" value="Cancel" onclick="window.location.href='{{route('portfolio')}}'"/>
-                <form action="route('tradeconfirm')">
+                <input type="button" value="Cancel" onclick="window.location.href='{{ route('portfolio') }}'"/>
+                <form action="{{route('tradeconfirm')}}">
                     <input type="submit" value="Submit Order"/>
                 </form>
                 <input type="button" value="Change Order" onclick="window.location.href='@php
@@ -159,15 +177,15 @@ td.num {
             <table class="table2 adjust">
                 <tr>
                     <th>VALUE (USD)</td>
-                    <td class="value num">${{ $value }}</td>
+                    <td class="value num">{{ '$'.number_format($value, 2) }}</td>
                 </tr>
                 <tr>
                     <th>BUYING POWER</td>
-                    <td class="value num">${{ $bpwr }}</td>
+                    <td class="value num">{{ '$'.number_format($bpwr, 2) }}</td>
                 </tr>
                 <tr>
                     <th>CASH</td>
-                    <td class="value num">${{ $cash }}</td>
+                    <td class="value num">{{ '$'.number_format($cash, 2) }}</td>
                 </tr>
             </table>
         </div>

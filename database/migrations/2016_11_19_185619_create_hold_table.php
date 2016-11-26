@@ -16,7 +16,7 @@ class CreateHoldTable extends Migration
         Schema::create('hold', function(Blueprint $table){
             $table->integer('U_id')->unsigned();
             $table->string('symbol');
-            $table->string('quantity');
+            $table->integer('quantity')->unsigned();
             $table->primary(['U_id','symbol']);
             
         });

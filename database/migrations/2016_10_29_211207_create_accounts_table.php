@@ -20,7 +20,8 @@ class CreateAccountsTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps(); 
-            $table->string('amount');
+            $table->decimal('amount', 15, 2)->unsigned();
+            // $table->string('amount');
         });
         
     }
@@ -32,7 +33,7 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account');
+        Schema::dropIfExists('accounts');
     }
 }
 

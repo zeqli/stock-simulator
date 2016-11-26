@@ -29,15 +29,24 @@ $factory->define(App\Account::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\trade::class, function(Faker\Generator $faker) use($factory){
+    $price = $faker->numberBetween(1,1000);
+    $commission = 4.99;
+    $qty = $faker->numberBetween(1,1000);
+    $buy_sell = 'buy';
+    $total_value = $buy_sell === 'buy' ? $price * $qty + $commission : $price * $qty + $commission; 
     return[
         'U_id' => $factory->create(App\Account::class)->id,
         'symbol' => DB::table('stock_symbols')->inRandomOrder()->first()->symbol,
-        'buy_sell' => rand(0,1) ==0 ?'buy' :'sell',
-        'price' => $faker->numberBetween(1,1000),
+        // 'buy_sell' => rand(0,1) ==0 ?'buy' :'sell',
+        'buy_sell' => 'buy',
+        'price' => $price,
         'time' => Carbon::createFromTimeStamp(
             $faker->dateTimeThisMonth()->getTimestamp()),
-        'quantity' =>$faker->numberBetween(1,100),
-        'status' => rand(0,1) ==0 ?'done' :'fail' 
+        'quantity' => $qty,
+        'commission' => 4.99,
+        'total_value' => $total_value,
+        'status' => rand(0,1) == 0 ?'done' :'fail',
+        'account_value' => 1000000 + round($faker->randomFloat(NULL, -40000, 50000), 2) 
     ];
 });
 
@@ -54,7 +63,6 @@ $factory->define(App\hold::class, function(Faker\Generator $faker) use($factory)
         'U_id' => $factory->create(App\Account::class)->id,
         'symbol' => DB::table('stock_symbols')->inRandomOrder()->first()->symbol,
         'quantity' => $faker->numberBetween(0,50)
-        
     ];
 
 });
