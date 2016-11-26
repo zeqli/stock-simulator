@@ -24,5 +24,7 @@ class trade extends Model
      */
     protected $hidden = [];
 
+    protected $primaryKey = 't_id';
+
     public $timestamps = false;
 }

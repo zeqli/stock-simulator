@@ -21,9 +21,10 @@ td, th {
 @section('page-header')
     <h1 class="page-header">Watchlist</h1>
     <div>
+        <p>Track stocks without adding it to your portfolio.</p>
+    </div>
+    <div>
     	<div>
-    		<h3>Stock Portfolio</h3>
-            <br>
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/simulator/markets/add/') }}">
                 {{ csrf_field() }}
   
@@ -45,7 +46,11 @@ td, th {
                 @foreach($query as $entry)
                     <tr>
                         <th>
-                            <td>{{ $entry['symbol'] }}</td>
+                            <td style="font-family:monospace; font-size:16px;">
+                                <a href="{{ route('stocks', ['symbol' => $entry['symbol']]) }}">{{ 
+                                    strtoupper($entry['symbol'])
+                                }}</a>
+                            </td>
                             <td>{{ $entry['name'] }}</td>
                             <td>{{ $entry['lasttrade'] }}</td>
                             <td>{{ $entry['change'] }}</td>

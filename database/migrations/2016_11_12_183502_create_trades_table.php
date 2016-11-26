@@ -18,11 +18,13 @@ class CreateTradesTable extends Migration
             $table->integer('U_id')->unsigned();
             $table->string('symbol');
             $table->string('buy_sell');
-            $table->string('price');
+            $table->decimal('price', 15, 2);
             $table->dateTime('time');
-            $table->string('quantity');
+            $table->integer('quantity')->unsigned();
+            $table->decimal('commission', 15, 2);
+            $table->decimal('total_value', 15, 2);
             $table->string('status');
-            
+            $table->decimal('account_value', 15, 2);
         });
 
         Schema::table('trade',function($table){
