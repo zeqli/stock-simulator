@@ -48,7 +48,9 @@ class YahooStock {
     {        
         $result = array();        
         $format = $this->format;
-
+        if(empty($this->stocks)){
+          return $result;
+        }
 
         $tickers = implode(',', $this->stocks);
         $handle = fopen("http://finance.yahoo.com/d/quotes.csv?s=$tickers&f=$format",'r');

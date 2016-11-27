@@ -68,7 +68,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'amount' => '100000000'
         ]);
     }
 }
