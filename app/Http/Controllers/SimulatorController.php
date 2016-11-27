@@ -212,11 +212,6 @@ class SimulatorController extends Controller{
         //     ->where('t_id', $tid)
         //     ->update(['status' => 'fail']);
 
-
-        DB::table('accounts')
-                ->where('id','=',$user->id)
-                ->update(['amount' => $user->amount + $trade->price]);
-
         return redirect('simulator/trade/showopentrades')->with('message', $tid);
     }
 
