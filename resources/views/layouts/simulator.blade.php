@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="icon" href="../../favicon.ico"> --}}
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>Stock Simulator</title>
 
     <!-- Bootstrap core CSS -->
     {{-- <link href="../../assets/css/bootstrap.min.css" rel="stylesheet"> --}}

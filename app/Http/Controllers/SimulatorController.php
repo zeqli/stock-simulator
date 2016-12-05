@@ -26,10 +26,9 @@ class SimulatorController extends Controller{
     }
 
     public function get_stocks_value($user_id){
-        $query = DB::table('accounts')
-                    ->where('accounts.id','=',$user_id)
-                    ->join('hold','accounts.id','=','hold.U_id')
-                    ->select('hold.symbol as symbol','hold.quantity as quantity')
+        $query = DB::table('hold')
+                    ->where('U_id', '=', $user_id)
+                    ->select('symbol', 'quantity')
                     ->distinct()
                     ->get();
         $hold_arr = $query->toArray();
@@ -45,16 +44,16 @@ class SimulatorController extends Controller{
     }
 
     public function get_account_value(){
-        $user = Auth::user();
+        $user_cached = Auth::user();
+        $user = DB::table('accounts')->where('id', $user_cached->id)->first();
         return $this->get_stocks_value($user->id) + $user->amount;
     }
 
-    /**
-    * Calculate adjusted purchase price by weighted average.
-    * 
-    * 
-    * 
-    */
+    public function tocurrency($numbers){
+        return '$'.number_format($numbers, 2);
+    }
+
+    // Calculate adjusted purchase price by weighted average. 
     public function get_adjusted_purchase($U_id, $symbol){
         $query = DB::table('accounts')
                     ->where('accounts.id','=',$U_id)
@@ -140,7 +139,7 @@ class SimulatorController extends Controller{
         }
         return view('portfolio.portf', [
                 'query' => $hold_entries, 
-                'acctval' => '$'.number_format($this->get_stocks_value($user->id) + $user->amount, 2), 
+                'acctval' => '$'.number_format($this->get_account_value(), 2), 
                 'cash' => '$'.number_format($user->amount, 2)
         ]);
 
@@ -172,6 +171,8 @@ class SimulatorController extends Controller{
         $open_time = Carbon::createFromTime(9,30,0);
         $close_time = Carbon::createFromTime(16,30,0);
         $now = Carbon::now();
+
+        // Prompt showing is stock market open or close 
         if($now->between($open_time, $close_time) && $now->isWeekday()){
             $request->session()->forget('close');
         }
@@ -197,7 +198,7 @@ class SimulatorController extends Controller{
         $user = Auth::user();
         $failtrades = DB::table('trade')
                         ->where('U_id', $user->id)
-                        ->where('status', 'fail')
+                        ->whereIn('status', ['fail', 'Cancelled by User'])
                         ->get();
         return view('trade.showfailtrade',  compact('failtrades'));
     }
@@ -208,9 +209,6 @@ class SimulatorController extends Controller{
         $trade = trade::findOrFail($tid);
         $trade->status = 'Cancelled by User';
         $trade->save();
-        // DB::table('trade')
-        //     ->where('t_id', $tid)
-        //     ->update(['status' => 'fail']);
 
         return redirect('simulator/trade/showopentrades')->with('message', $tid);
     }
@@ -225,21 +223,18 @@ class SimulatorController extends Controller{
         $result = StockSymbol::where('symbol', $symbol)->first();
         $cash = $user->amount;
 
-        // If symbol field is empty, or the symbol is present in our database
-        // then redirect the user to symbol no found page
+        // If symbol input is empty or the symbol is present in our database
+        // redirect the user back with symbol no found prompt
         if($result === null){
             return back()->withInput()->with('symbol', $symbol);
         }
 
 
-        // Check if the quantity is valid
-        
+        // Validate if the quantity is valid
         $hold_shares = DB::table('hold')
                     ->select('quantity')
-                    ->where([
-                        ['U_id', '=', $user->id],
-                        ['symbol', '=', $symbol],
-                      ])
+                    ->where('U_id', '=', $user->id)
+                    ->where('symbol', '=', $symbol)
                     ->get();
 
         if(!ctype_digit($qty) || intval($qty) > 999999  || intval($qty) < 1){
@@ -248,6 +243,7 @@ class SimulatorController extends Controller{
 
 
         // Two validations: 
+        // Selling Validation
         // 1. If user is selling some shares of stocks, the selling qty must not exceed the holding amount
         if($trans === 'sell' && (!count($hold_shares) || $hold_shares->first()->quantity < intval($qty)) ){
             return back()->withInput()->with('sell-error', 1);
@@ -261,7 +257,7 @@ class SimulatorController extends Controller{
         $value = $this->get_account_value();
 
         // 2. if user is buying some shares of stock, the cost must smaller than cash in accounts. 
-        if ($cash < $total) {
+        if ($trans === 'buy' && $cash < $total) {
             return back()->withInput()->with('buy-error', 1)->with('maxposit', '$'.number_format($cash,2));
         }
 
@@ -282,6 +278,7 @@ class SimulatorController extends Controller{
         $open_time = Carbon::createFromTime(9,30,0);
         $close_time = Carbon::createFromTime(16,30,0);
         $now = Carbon::now();
+
         if($now->between($open_time, $close_time) && $now->isWeekday()){
             $request->session()->forget('close');
         }
@@ -304,8 +301,9 @@ class SimulatorController extends Controller{
             // If transaction has been made, when we refresh page, it won't touch database.
             if($request->session()->has('success')){
                 $request->session()->reflash();
-                return view('trade.tradeconfirm', ['buy_sell' => $trade_request['trans'], 
-                                               'symbol' => $trade_request['symbol']]);
+                return view('trade.tradeconfirm', 
+                            ['buy_sell' => $trade_request['trans'], 
+                            'symbol' => $trade_request['symbol']]);
             }
             
             $open_time = Carbon::createFromTime(9,30,0);
@@ -318,7 +316,6 @@ class SimulatorController extends Controller{
              * 3. Insert transaction
              *
              */     
-
             $transaction = new trade;
             $transaction->U_id = $user->id;
             $transaction->symbol = $trade_request['symbol'];
@@ -328,10 +325,9 @@ class SimulatorController extends Controller{
             $transaction->quantity = $trade_request['quantity'];
             $transaction->commission = $trade_request['commission'];
             $transaction->total_value = $trade_request['total'];
-            $transaction->status = $now->between($open_time, $close_time) && $now->isWeekday() ? 'done' : 'pending';
-            // $transaction->status = 'done';
+            // $transaction->status = $now->between($open_time, $close_time) && $now->isWeekday() ? 'done' : 'pending';
+            $transaction->status = 'done';
                        
-
             if($transaction->status === 'done'){
                 $hold = DB::table('hold')
                             ->where('U_id','=',$transaction->U_id)
@@ -349,6 +345,7 @@ class SimulatorController extends Controller{
                 $qty = $hold->quantity;
 
                 switch ($transaction->buy_sell) {
+                    // update holding quantity
                     case 'buy':
                         DB::table('hold')
                             ->where('U_id','=',$transaction->U_id)
@@ -358,7 +355,7 @@ class SimulatorController extends Controller{
                         // Deduct total cost from user's buying power
                         DB::table('accounts')
                             ->where('id','=',$user->id)
-                            ->update(['amount' => $user->amount - $trade_request['total']]);
+                            ->update(['amount' => $user->amount - $transaction->total_value]);
                         break;
                     case 'sell':
                         // Delete record if qty reaches zero
@@ -377,7 +374,7 @@ class SimulatorController extends Controller{
                         // Add to user's buying power
                         DB::table('accounts')
                             ->where('id','=',$user->id)
-                            ->update(['amount' => $user->amount + $trade_request['quantity'] * $trade_request['price']]);
+                            ->update(['amount' => $user->amount + $transaction->total_value]);
                         break;
                     
                     default:
@@ -388,6 +385,7 @@ class SimulatorController extends Controller{
             $transaction->account_value = $this->get_account_value();
             $transaction->save(); 
 
+            // Keep data for one more session after refresh
             $request->session()->reflash();
             $request->session()->flash('success', 1);
 
@@ -412,10 +410,7 @@ class SimulatorController extends Controller{
     }
 
     public function markets_watchlist(){
-
         $objYahooStock = new YahooStock;    
-
-
 
         $user = Auth::user();  
 
@@ -489,7 +484,6 @@ class SimulatorController extends Controller{
         $insert = DB::table('watchlist')->insert(
             ['U_id' => $user->id,  'symbol' => $symbol]
             );
-
         return redirect()->route('watchlist');                                          
     }
 }
